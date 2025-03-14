@@ -2,7 +2,7 @@ from talon import Module, Context, actions, ctrl
 from .src.scrolling import scrolling
 from .src.tracking import tracking
 from .src.movement import movement
-from .src.ui import cursor
+from .src.cursor import cursor
 from .src.position import position
 
 mod = Module()
@@ -18,6 +18,8 @@ parrot_mode_enabled = False
 RED = "FF0000"
 GREEN = "00FF00"
 YELLOW = "FFFF00"
+GREEN = "43e658"
+TEAL = "34d5eb"
 
 def move(dir: str):
     if not actions.user.parrot_config_mode() != "move":
@@ -31,28 +33,29 @@ def stopper():
     scrolling.scroll_stop_hard()
     actions.user.parrot_config_set_mode("default")
 
+is_left_click_held = False
+
 def click(button = 0, hold = False):
-    stopper()
-    if hold:
+    global is_left_click_held
+    if not (tracking.full_tracking and tracking.is_tracking):
+        stopper()
+
+    if is_left_click_held:
+        ctrl.mouse_click(button=button, up=True)
+        cursor.hide_border()
+        is_left_click_held = False
+        return
+    elif hold:
         ctrl.mouse_click(button=button, down=True)
+        cursor.show_border()
+        is_left_click_held = True
     else:
         ctrl.mouse_click(button=button, hold=16000)
+        cursor.hide_border()
 
 def click_exit():
     click()
     actions.user.parrot_mode_v6_toggle()
-
-def scroll_up():
-    actions.mouse_scroll(1)
-
-def scroll_down():
-    actions.mouse_scroll(-1)
-
-def scroll_stop_soft():
-    actions.mouse_scroll(0)
-
-def repeater():
-    actions.mouse_click(0, 1)
 
 def scroll(dir: str):
     tracking.freeze()
@@ -67,14 +70,23 @@ def move(dir: str):
     movement.move(dir)
     actions.user.parrot_config_set_mode("move")
 
-def teleport():
+def tracking_activate():
     movement.stop()
-    cursor.color(GREEN)
-    tracking.teleport_and_track_head()
+    color = TEAL if tracking.full_tracking else GREEN
+    cursor.color(color)
+    tracking.activate()
+
+def tracking_toggle():
+    tracking.toggle_full_tracking()
+    color = TEAL if tracking.full_tracking else GREEN
+    cursor.color(color)
 
 def set_position(pos: str):
     cursor.color(RED)
     getattr(position, pos)()
+
+def repeater():
+    pass
 
 parrot_config_pos = {
     "tut ah":       ("pos left", lambda: set_position("left")),
@@ -83,6 +95,7 @@ parrot_config_pos = {
     "tut guh":      ("pos down", lambda: set_position("down")),
     "tut t":        ("pos up", lambda: set_position("up")),
     "tut pop":      ("pos mark", lambda: None),
+    "tut eh":       ("toggle full tracking", tracking_toggle),
     "tut mm":       ("hold click", lambda: click(hold=True)),
 }
 
@@ -94,7 +107,7 @@ parrot_config_window = {
 }
 
 parrot_config_basics = {
-    "eh":           ("teleport", teleport),
+    "eh":           ("teleport or track", tracking_activate),
     "ah":           ("move left", lambda: move("left")),
     "oh":           ("move right", lambda: move("right")),
     "guh":          ("move down", lambda: move("down")),
@@ -106,8 +119,7 @@ parrot_config_basics = {
     "hiss_stop":    ("", scrolling.scroll_stop_soft),
     "shush":        ("scroll up", lambda: scroll("up")),
     "shush_stop":   ("", scrolling.scroll_stop_soft),
-    # "palate_click": ("repeater", repeater),
-    # "palate":       ("repeater", movement.boost),
+    "palate":       ("repeater", repeater),
     "cluck":        ("exit", actions.user.parrot_mode_v6_disable),
 }
 
@@ -130,41 +142,6 @@ parrot_config = {
         **parrot_config_move,
     }
 }
-
-        # "tut":          ("toggle parrot", toggle_parrot_v6),
-
-        # "t": ("move up", lambda: None),
-        # "guh": ("move down", lambda: None),
-        # "ah": ("move left", lambda: None),
-        # "oh": ("move right", lambda: None),
-        # "ee": ("stopper", lambda: None),
-        # "hiss": ("scroller up", lambda: None),
-        # "hiss_stop": ("", lambda: None),
-        # "shush": ("scroller down", lambda: None),
-        # "shush_stop": ("", lambda: None),
-        # "palate_click": ("repeater", lambda: None),
-        # "tut": ("mod position", lambda: None),
-        # "cluck": ("mod window", lambda: None),
-        # "mm": ("click", lambda: None),
-        # "pop": ("click > 1 shot voice", lambda: None),
-        # "er": ("mode", lambda: None),
-        # "tut ah": ("pos left", lambda: None),
-        # "tut oh": ("pos right", lambda: None),
-        # "tut ee": ("pos main", lambda: None),
-        # "tut guh": ("pos down", lambda: None),
-        # "tut eh": ("pos up", lambda: None),
-        # "tut mm": ("hold click", lambda: None),
-        # "tut pop": ("pos mark", lambda: None),
-        # "cluck ah": ("win left", lambda: None),
-        # "cluck oh": ("win right", lambda: None),
-        # "cluck eh": ("win maximize", lambda: None),
-        # "cluck guh": ("win minimize", lambda: None),
-        # "cluck shush": ("refresh", lambda: None),
-        # "cluck hiss": ("back", lambda: None),
-        # "cluck t": ("window last", lambda: None),
-
-    # }
-# }
 
 @ctx.action_class("user")
 class Actions:

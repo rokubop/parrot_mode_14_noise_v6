@@ -1,4 +1,6 @@
-from talon import actions
+from talon import actions, ctrl
+
+INCREMENT_VALUE = 60
 
 class Movement():
     def move(self, direction):
@@ -58,3 +60,20 @@ class Movement():
         actions.user.mouse_move_continuous_stop()
 
 movement = Movement()
+
+def mouse_move_smooth_to_gaze():
+    x = actions.mouse_x()
+    y = actions.mouse_y()
+    actions.tracking.jump()
+    gaze_x = actions.mouse_x()
+    gaze_y = actions.mouse_y()
+    actions.mouse_move(x, y)
+    actions.user.mouse_move_smooth_from_to(x, y, gaze_x, gaze_y)
+
+def mouse_move_smooth_from_gaze():
+    x = actions.mouse_x()
+    y = actions.mouse_y()
+    actions.tracking.jump()
+    gaze_x = actions.mouse_x()
+    gaze_y = actions.mouse_y()
+    actions.user.mouse_move_smooth_from_to(gaze_x, gaze_y, x, y)

@@ -3,10 +3,23 @@ from talon import Module, actions
 class Tracking():
     def __init__(self):
         self.is_tracking = False
+        self.full_tracking = False
 
-    def teleport_and_track_head(self):
+    def activate(self):
         if not actions.tracking.control_enabled():
             actions.tracking.control_toggle(True)
+
+        if self.full_tracking:
+            self.full_track_enable()
+        else:
+            self.teleport_and_track_head()
+
+    def full_track_enable(self):
+        actions.tracking.control_gaze_toggle(True)
+        actions.tracking.control_head_toggle(True)
+        self.is_tracking = True
+
+    def teleport_and_track_head(self):
         actions.tracking.control_head_toggle(False)
         actions.tracking.control_gaze_toggle(True)
         actions.sleep("50ms")
@@ -19,5 +32,14 @@ class Tracking():
             actions.tracking.control_head_toggle(False)
             actions.tracking.control_gaze_toggle(False)
             self.is_tracking = False
+
+    def toggle_full_tracking(self):
+        if self.full_tracking:
+            self.teleport_and_track_head()
+        else:
+            self.full_track_enable()
+
+        self.full_tracking = not self.full_tracking
+
 
 tracking = Tracking()

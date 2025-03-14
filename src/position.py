@@ -12,14 +12,14 @@ class Position:
 
     def down(self):
         screen = get_screen()
-        actions.mouse_move(screen.width / 2, screen.height - 150)
+        actions.mouse_move(screen.x + screen.width / 2, screen.y + screen.height - 150)
 
     def right(self):
         screen = get_screen()
-        actions.mouse_move(screen.width - 200, screen.y + screen.height / 2)
+        actions.mouse_move(screen.x + screen.width - 200, screen.y + screen.height / 2)
 
     def up(self):
         screen = get_screen()
-        actions.mouse_move(screen.width / 2, screen.y + 50)
+        actions.mouse_move(screen.x + screen.width / 2, screen.y + 50)
 
 position = Position()
