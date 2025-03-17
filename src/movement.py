@@ -59,6 +59,10 @@ class Movement():
     def stop(self):
         actions.user.mouse_move_continuous_stop()
 
+    def is_moving(self):
+        info = actions.user.mouse_move_info()
+        return info["is_moving"]
+
 movement = Movement()
 
 def mouse_move_smooth_to_gaze():
