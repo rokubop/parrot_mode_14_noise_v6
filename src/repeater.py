@@ -23,7 +23,7 @@ for key, value in two_way_opposites:
     opposites[value] = key
 
 last_tut = ""
-last_palete = ""
+last_palate = ""
 
 class StateReverse:
     def __init__(self):
@@ -47,23 +47,23 @@ stateReverse = StateReverse()
 
 def repeat():
     """Repeat the last command"""
-    global last_palete, last_tut, palate_mode
+    global last_palate, last_tut, palate_mode
 
     if (actions.speech.enabled()):
         if (stateReverse.is_active() and last_tut):
             last_command = actions.user.history_get(0)
             for word in opposites:
                 if word in last_command:
-                    if last_palete and last_palete in last_command:
+                    if last_palate and last_palate in last_command:
                         actions.mimic(last_command)
                         last_tut = ""
                     else:
                         oppositePhrase = last_command.replace(word, opposites[word])
-                        last_palete = oppositePhrase
+                        last_palate = oppositePhrase
                         actions.mimic(oppositePhrase)
                         last_tut = ""
                     return
-            last_palete = ""
+            last_palate = ""
         else:
             actions.core.repeat_command()
 
@@ -71,7 +71,7 @@ def repeat():
 
 def reverse():
     """Reverse the last command"""
-    global last_tut, last_palete
+    global last_tut, last_palate
 
     if (actions.speech.enabled() and stateReverse.is_active()):
         last_command = actions.user.history_get(0)
@@ -80,12 +80,12 @@ def reverse():
             if word in last_command:
                 if last_tut and last_tut in last_command:
                     actions.mimic(last_command)
-                    last_palete = ""
+                    last_palate = ""
                 else:
                     oppositePhrase = last_command.replace(word, opposites[word])
                     last_tut = oppositePhrase
                     actions.mimic(oppositePhrase)
-                    last_palete = ""
+                    last_palate = ""
                 return
         last_tut = ""
 

@@ -9,6 +9,7 @@ class Scrolling():
         self.scroll_stop_soft_ts = None
         self.debounce_start_duration = 0.0
         self.debounce_stop_duration = 0.170
+        self.scroll_stop_soft_callbacks = []
 
     def scroll_start(self, direction: str):
         """Start scrolling until stop is called"""
@@ -34,6 +35,9 @@ class Scrolling():
 
         if self.scroll_stop_soft_ts and ts - self.scroll_stop_soft_ts > self.debounce_stop_duration:
             self.scroll_stop_hard()
+            if self.scroll_stop_soft_callbacks:
+                for callback in self.scroll_stop_soft_callbacks:
+                    callback()
             return
 
         acceleration_speed = 1 + min((ts - self.scroll_start_ts) / 0.5, 4)
@@ -56,5 +60,11 @@ class Scrolling():
 
     def is_scrolling(self):
         return self.scroll_job is not None
+
+    def register_scroll_stop_soft_callback(self, callback):
+        self.scroll_stop_soft_callbacks.append(callback)
+
+    def clear_scroll_stop_soft_callbacks(self):
+        self.scroll_stop_soft_callbacks.clear()
 
 scrolling = Scrolling()

@@ -1,9 +1,11 @@
-from talon import Module, actions
+from talon import Module, actions, storage
 
 class Tracking():
+    FULL_TRACKING_ID = "parrot_v6.full_tracking"
+
     def __init__(self):
         self.is_tracking = False
-        self.full_tracking = False
+        self.full_tracking = storage.get(self.FULL_TRACKING_ID, False)
 
     def activate(self):
         if not actions.tracking.control_enabled():
@@ -18,6 +20,7 @@ class Tracking():
         actions.tracking.control_gaze_toggle(True)
         actions.tracking.control_head_toggle(True)
         self.is_tracking = True
+        storage.set(self.FULL_TRACKING_ID, True)
 
     def teleport_and_track_head(self):
         actions.tracking.control_head_toggle(False)
@@ -36,6 +39,7 @@ class Tracking():
     def toggle_full_tracking(self):
         if self.full_tracking:
             self.teleport_and_track_head()
+            storage.set(self.FULL_TRACKING_ID, False)
         else:
             self.full_track_enable()
 

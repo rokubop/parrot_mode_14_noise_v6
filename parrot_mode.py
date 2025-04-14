@@ -11,24 +11,26 @@ mode: user.parrot_v6
 
 parrot_config_basics = {
     "eh":           ("teleport/track", parrot_actions.tracking_activate),
-    "ah":           ("move left", lambda: parrot_actions.move("left")),
-    "oh":           ("move right", lambda: parrot_actions.move("right")),
-    "guh":          ("move down", lambda: parrot_actions.move("down")),
-    "t":            ("move up", lambda: parrot_actions.move("up")),
+    "ah:th_90":     ("move left", lambda: parrot_actions.move_or_slow("left")),
+    "oh:th_90":     ("move right", lambda: parrot_actions.move_or_slow("right")),
+    "guh":          ("move down", lambda: parrot_actions.move_or_slow("down")),
+    "t":            ("move up", lambda: parrot_actions.move_or_slow("up")),
     "ee":           ("stop", parrot_actions.stopper),
-    "pop":          ("click exit", parrot_actions.click_exit),
+    "er":           ("last mouse pos", parrot_actions.mouse_position_restore),
     "mm":           ("click", parrot_actions.click),
     "hiss":         ("scroll down", lambda: parrot_actions.scroll("down")),
     "hiss_stop":    ("", parrot_actions.scroll_stop_soft),
     "shush":        ("scroll up", lambda: parrot_actions.scroll("up")),
     "shush_stop":   ("", parrot_actions.scroll_stop_soft),
     "palate":       ("repeater", parrot_actions.repeater),
-    "cluck":        ("exit", parrot_actions.parrot_mode_disable),
+    "pop":          ("click await phrase", parrot_actions.click_await_one_phrase),
+    "cluck":        ("await phrase", parrot_actions.await_one_phrase),
+    "tut tut":      ("exit", parrot_actions.parrot_mode_disable),
 }
 
 parrot_config_utilities = {
-    "tut tut":      ("left click drag", lambda: parrot_actions.click(hold=True)),
-    "tut mm":       ("middle click drag", lambda: parrot_actions.click(button=2, hold=True)),
+    "tut mm":      ("left click drag", lambda: parrot_actions.click(hold=True)),
+    # "tut mm":       ("middle click drag", lambda: parrot_actions.click(button=2, hold=True)),
     "tut oh":       ("right click", lambda: parrot_actions.click(button=1)),
     "tut t":        ("toggle shift", lambda: parrot_actions.toggle_modifier("shift")),
     "tut guh":      ("toggle control", lambda: parrot_actions.toggle_modifier("ctrl")),
@@ -50,7 +52,6 @@ parrot_config_move = {
     "shush_stop":   ("", lambda: None),
     "hiss":         ("boost small", parrot_actions.boost_small),
     "hiss_stop":    ("", lambda: None),
-    "tut":          ("slower", parrot_actions.move_slower),
 }
 
 parrot_config = {
