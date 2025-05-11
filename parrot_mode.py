@@ -23,9 +23,8 @@ parrot_config_basics = {
     "shush":        ("scroll up", lambda: parrot_actions.scroll("up")),
     "shush_stop":   ("", parrot_actions.scroll_stop_soft),
     "palate":       ("repeater", parrot_actions.repeater),
-    "pop":          ("click await phrase", parrot_actions.click_await_one_phrase),
-    "cluck":        ("await phrase", parrot_actions.await_one_phrase),
-    "tut tut":      ("exit", parrot_actions.parrot_mode_disable),
+    "pop":          ("click exit", parrot_actions.click_exit),
+    "cluck":        ("exit", parrot_actions.parrot_mode_disable),
 }
 
 parrot_config_utilities = {
