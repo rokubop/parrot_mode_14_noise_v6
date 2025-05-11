@@ -28,7 +28,7 @@ parrot_config_basics = {
 }
 
 parrot_config_utilities = {
-    "tut mm":      ("left click drag", lambda: parrot_actions.click(hold=True)),
+    "tut mm":       ("left click drag", lambda: parrot_actions.click(hold=True)),
     # "tut mm":       ("middle click drag", lambda: parrot_actions.click(button=2, hold=True)),
     "tut oh":       ("right click", lambda: parrot_actions.click(button=1)),
     "tut t":        ("toggle shift", lambda: parrot_actions.toggle_modifier("shift")),

@@ -1,0 +1,31 @@
+{
+  "name": "parrot_mode_14_noise_v6",
+  "description": "A mode where only noises are active, toggled on and off by one dedicated noise",
+  "version": "0.2.0",
+  "contributes": {
+    "modes": ["user.parrot_v6"],
+    "settings": ["user.parrot_mode_v6_mouse_scroll_speed"],
+    "actions": [
+      "user.parrot_mode_v6_disable",
+      "user.parrot_mode_v6_enable",
+      "user.parrot_mode_v6_repeater",
+      "user.parrot_mode_v6_reverser",
+      "user.parrot_mode_v6_toggle"
+    ]
+  },
+  "depends": {
+    "actions": [
+      "core.repeat_command",
+      "core.repeat_phrase",
+      "user.history_get",
+      "user.mouse_move_continuous",
+      "user.mouse_move_continuous_speed_decrease",
+      "user.mouse_move_continuous_stop",
+      "user.mouse_move_info",
+      "user.mouse_move_smooth_delta",
+      "user.mouse_move_smooth_from_to",
+      "user.parrot_config",
+      "user.parrot_config_set_mode"
+    ]
+  }
+}

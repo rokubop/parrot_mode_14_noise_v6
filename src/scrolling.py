@@ -42,7 +42,7 @@ class Scrolling():
 
         acceleration_speed = 1 + min((ts - self.scroll_start_ts) / 0.5, 4)
         y = (
-            settings.get("user.event_mouse_scroll_speed")
+            settings.get("user.parrot_mode_v6_mouse_scroll_speed")
             * acceleration_speed
             * self.scroll_dir
         )

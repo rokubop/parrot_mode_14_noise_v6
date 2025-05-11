@@ -1,6 +1,7 @@
 from talon import actions, cron, ctrl
 from talon.canvas import Canvas
 from talon.skia.canvas import Canvas as SkiaCanvas
+from .utils import get_screen
 
 canvas_cursor = None
 canvas_cursor_job = None
@@ -95,7 +96,7 @@ class Cursor:
     def show(self, color: str):
         self._color = color or default_cursor_color
         if not self._canvas:
-            current_screen = actions.user.ui_get_current_screen()
+            current_screen = get_screen()
             self._canvas = Canvas.from_screen(current_screen)
             self._canvas.register("draw", self.on_update)
             self._update_job = cron.interval("16ms", self.freeze)
